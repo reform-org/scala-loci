@@ -15,7 +15,7 @@ private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelP
 
   protected def connect(connectionEstablished: Connected[P]) = {
 
-    val socket = new dom.WebSocket(url)
+    val bc = new dom.BroadcastChannel(name)
 
     socket.onopen = { (_: dom.Event) =>
     

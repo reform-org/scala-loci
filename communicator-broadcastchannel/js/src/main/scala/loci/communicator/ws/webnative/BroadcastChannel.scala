@@ -18,12 +18,11 @@ trait BroadcastChannel
 object BroadcastChannel extends BroadcastChannelSetupFactory {
   def unapply(broadcastChannel: BroadcastChannel) = Some((broadcastChannel.name))
 
-  case class Properties(
-    heartbeatDelay: FiniteDuration = 3.seconds,
-    heartbeatTimeout: FiniteDuration = 10.seconds)
+  case class Properties()
 
-  def apply(url: String): Connector[BroadcastChannel] =
-    new BroadcastChannelConnector[BroadcastChannel](url, Properties())
-  def apply(url: String, properties: Properties): Connector[BroadcastChannel] =
-    new BroadcastChannelConnector[BroadcastChannel](url, properties)
+  def apply(name: String): Connector[BroadcastChannel] =
+    new BroadcastChannelConnector[BroadcastChannel](name, Properties())
+
+  def apply(name: String, properties: Properties): Connector[BroadcastChannel] =
+    new BroadcastChannelConnector[BroadcastChannel](name, properties)
 }

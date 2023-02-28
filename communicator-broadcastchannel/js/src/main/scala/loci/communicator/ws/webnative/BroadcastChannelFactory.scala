@@ -11,14 +11,10 @@ private object BroadcastChannelSetupParser
 
   def properties(implicit props: ConnectionSetupFactory.Properties) =
     BroadcastChannel.Properties()
-      .set[FiniteDuration]("heartbeat-delay") { v => _.copy(heartbeatDelay = v) }
-      .set[FiniteDuration]("heartbeat-timeout") { v => _.copy(heartbeatTimeout = v) }
 }
 
 trait BroadcastChannelSetupFactory extends ConnectionSetupFactory.Implementation[BroadcastChannel] {
   val self: BroadcastChannel.type = BroadcastChannel
-
-  val schemes = Seq("ws", "wss")
 
   protected def properties(
       implicit props: ConnectionSetupFactory.Properties): BroadcastChannel.Properties =
