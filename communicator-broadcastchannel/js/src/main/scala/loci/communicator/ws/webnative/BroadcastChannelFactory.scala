@@ -32,21 +32,3 @@ trait BroadcastChannelSetupFactory extends ConnectionSetupFactory.Implementation
       url: String, scheme: String, location: String, properties: BroadcastChannel.Properties) =
     Some(BroadcastChannel(url, properties))
 }
-
-trait BroadcastChannelSecureSetupFactory extends ConnectionSetupFactory.Implementation[BroadcastChannel.Secure] {
-  val self: BroadcastChannel.type = BroadcastChannel
-
-  val schemes = Seq("wss")
-
-  protected def properties(
-      implicit props: ConnectionSetupFactory.Properties): BroadcastChannel.Properties =
-    WSSetupParser.properties
-
-  protected def listener(
-      url: String, scheme: String, location: String, properties: BroadcastChannel.Properties) =
-    None
-
-  protected def connector(
-      url: String, scheme: String, location: String, properties: BroadcastChannel.Properties) =
-    Some(BroadcastChannel.Secure(url, properties))
-}

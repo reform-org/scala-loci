@@ -10,7 +10,7 @@ import scala.scalajs.js.typedarray.ArrayBuffer
 import scala.util.{Failure, Success}
 
 private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelProtocolFactory](
-  url: String, properties: BroadcastChannel.Properties)
+  name: String, properties: BroadcastChannel.Properties)
     extends Connector[P] {
 
   protected def connect(connectionEstablished: Connected[P]) = {
@@ -18,23 +18,8 @@ private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelP
     val socket = new dom.WebSocket(url)
 
     socket.onopen = { (_: dom.Event) =>
-
-      // protocol properties
-
-      val (tls, host, port) = dom.document.createElement("a") match {
-        case parser: dom.html.Anchor =>
-          parser.href = url
-          val tls = (parser.protocol compareToIgnoreCase "wss:") == 0
-          val host = Some(parser.hostname)
-          val port =
-            try Some(parser.port.toInt)
-            catch { case _: NumberFormatException => None }
-          (tls, host, port)
-        case _ =>
-          (false, None, None)
-      }
-
-      implicitly[WSProtocolFactory[P]].make(url, host, port, this, tls, tls, tls) match {
+    
+      implicitly[BroadcastChannelProtocolFactory[P]].make(name) match {
         case Failure(exception) =>
           connectionEstablished.set(Failure(exception))
 
