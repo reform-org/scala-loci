@@ -15,6 +15,8 @@ class JSBroadcastChannel(name: String) extends js.Object {
   def postMessage(value: js.Any): Unit = js.native
 
   def addEventListener(`type`: String, callback: js.Function1[dom.MessageEvent, _]): Unit = js.native
+
+  def close(): Unit = js.native
 }
 
 private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelProtocolFactory](
@@ -38,17 +40,16 @@ private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelP
           val closed = doClosed.notice
           val receive = doReceive.notice
 
-          def open = bc.readyState == dom.WebSocket.OPEN
+          def open = true
           def send(data: MessageBuffer) = {
-            bc.send(data.backingArrayBuffer)
-            resetInterval.fire()
+            bc.postMessage(data.backingArrayBuffer)
           }
           def close() = bc.close()
         }
 
         connectionEstablished.set(Success(connection))
 
-        bc.onmessage = { (event: dom.MessageEvent) =>
+        bc.addEventListener("message", { (event: dom.MessageEvent) =>
           event.data match {
             case data: ArrayBuffer =>
               doReceive.fire(MessageBuffer wrapArrayBuffer data)
@@ -63,7 +64,7 @@ private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelP
 
             case _ =>
           }
-        }
+        })
     }
   }
 }
