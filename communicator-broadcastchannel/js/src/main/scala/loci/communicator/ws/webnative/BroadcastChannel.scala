@@ -6,8 +6,6 @@ import scala.concurrent.duration._
 
 trait BroadcastChannel
     extends Protocol
-    with SetupInfo
-    with SecurityInfo
     with SymmetryInfo with Bidirectional {
 
   val name: String

@@ -8,6 +8,7 @@ import scala.scalajs.js
 import scala.scalajs.js.timers._
 import scala.scalajs.js.typedarray.ArrayBuffer
 import scala.util.{Failure, Success}
+import scala.scalajs.js.annotation._
 
 @js.native
 @JSGlobal("BroadcastChannel")
