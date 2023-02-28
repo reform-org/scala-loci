@@ -9,13 +9,23 @@ import scala.scalajs.js.timers._
 import scala.scalajs.js.typedarray.ArrayBuffer
 import scala.util.{Failure, Success}
 
+@js.native
+@JSGlobal("BroadcastChannel")
+class JSBroadcastChannel(name: String) extends js.Object {
+  def postMessage(value: js.Any): Unit = js.native
+
+  def addEventListener(`type`: String, callback: js.Function1[dom.MessageEvent, _]): Unit = js.native
+}
+
 private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelProtocolFactory](
   name: String, properties: BroadcastChannel.Properties)
     extends Connector[P] {
 
   protected def connect(connectionEstablished: Connected[P]) = {
 
-    val bc = new dom.BroadcastChannel(name)
+    dom.window.addEventListener()
+
+    val bc = new JSBroadcastChannel(name)
 
     socket.onopen = { (_: dom.Event) =>
     
