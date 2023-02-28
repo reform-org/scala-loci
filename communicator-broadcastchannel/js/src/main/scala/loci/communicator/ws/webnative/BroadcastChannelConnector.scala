@@ -5,7 +5,6 @@ package broadcastchannel
 import org.scalajs.dom
 
 import scala.scalajs.js
-import scala.scalajs.js.timers._
 import scala.scalajs.js.typedarray.ArrayBuffer
 import scala.util.{Failure, Success}
 import scala.scalajs.js.annotation._
@@ -27,7 +26,7 @@ private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelP
   protected def connect(connectionEstablished: Connected[P]) = {
     val bc = new JSBroadcastChannel(name)
     
-    implicitly[BroadcastChannelProtocolFactory[P]].make(name) match {
+    implicitly[BroadcastChannelProtocolFactory[P]].make(name, this) match {
       case Failure(exception) =>
         connectionEstablished.set(Failure(exception))
 

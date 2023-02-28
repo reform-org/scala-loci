@@ -2,7 +2,6 @@ package loci
 package communicator
 package broadcastchannel
 
-import scala.concurrent.duration.FiniteDuration
 
 private object BroadcastChannelSetupParser
     extends ConnectionSetupParser
