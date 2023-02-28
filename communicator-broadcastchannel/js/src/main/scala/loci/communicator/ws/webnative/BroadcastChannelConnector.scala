@@ -30,13 +30,13 @@ private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelP
       case Failure(exception) =>
         connectionEstablished.set(Failure(exception))
 
-      case Success(ws) =>
+      case Success(p) =>
 
         val doClosed = Notice.Steady[Unit]
         val doReceive = Notice.Stream[MessageBuffer]
 
         val connection = new Connection[P] {
-          val protocol = ws
+          val protocol = p
           val closed = doClosed.notice
           val receive = doReceive.notice
 

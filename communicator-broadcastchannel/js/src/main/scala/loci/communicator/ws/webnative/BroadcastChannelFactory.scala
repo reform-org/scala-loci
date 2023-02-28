@@ -2,13 +2,12 @@ package loci
 package communicator
 package broadcastchannel
 
-
 private object BroadcastChannelSetupParser
     extends ConnectionSetupParser
     with SimpleConnectionSetupProperties {
   val self: BroadcastChannel.type = BroadcastChannel
 
-  def properties(implicit props: ConnectionSetupFactory.Properties) =
+  def properties =
     BroadcastChannel.Properties()
 }
 
