@@ -44,7 +44,10 @@ private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelP
           def send(data: MessageBuffer) = {
             bc.postMessage(data.backingArrayBuffer)
           }
-          def close() = bc.close()
+          def close() = {
+            bc.close()
+            doClosed.set()
+          }
         }
 
         connectionEstablished.set(Success(connection))
@@ -64,6 +67,12 @@ private class BroadcastChannelConnector[P <: BroadcastChannel: BroadcastChannelP
 
             case _ =>
           }
+        })
+
+        bc.addEventListener("messageerror", { (event: dom.MessageEvent) =>
+          connectionEstablished.trySet(Failure(new ConnectionException("BroadcastChannel failed to receive message")))
+          bc.close()
+          doClosed.set()
         })
     }
   }
